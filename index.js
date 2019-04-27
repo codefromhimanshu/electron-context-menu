@@ -114,6 +114,16 @@ const create = (win, options) => {
 					});
 				}
 			}),
+			newTab: decorateMenuItem({
+				id: 'newTab',
+				label: 'Open Link in New Tab',
+				visible: props.linkURL.length !== 0 && props.mediaType === 'none',
+				click(menuItem) {
+					props.linkURL = menuItem.transform ? menuItem.transform(props.linkURL) : props.linkURL;
+
+					win.dispatchEvent(new CustomEvent("new-window", { detail : { url : props.linkURL}}));
+				}
+			}),
 			copyImageAddress: decorateMenuItem({
 				id: 'copyImageAddress',
 				label: 'Copy Image Address',
@@ -130,6 +140,7 @@ const create = (win, options) => {
 		};
 
 		let menuTemplate = [
+			defaultActions.newTab(),
 			defaultActions.separator(),
 			defaultActions.cut(),
 			defaultActions.copy(),
